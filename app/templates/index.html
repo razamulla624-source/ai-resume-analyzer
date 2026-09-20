@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ResumeAI | Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-icon">✦</div>
+
+            <div>
+                <h2>ResumeAI</h2>
+                <span>AI Career Intelligence</span>
+            </div>
+        </div>
+
+        <nav>
+
+            <a href="/" class="nav-item active">
+                <span>⌂</span>
+                Dashboard
+            </a>
+
+            <a href="/history" class="nav-item">
+                <span>◷</span>
+                Analysis History
+            </a>
+
+        </nav>
+
+        <div class="sidebar-bottom">
+
+            <div class="ai-status">
+                <div class="status-dot"></div>
+
+                <div>
+                    <strong>AI Engine</strong>
+                    <small>Online & Ready</small>
+                </div>
+            </div>
+
+            <div class="sidebar-footer">
+                CSE Project
+            </div>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+    <main class="main">
+
+        <!-- TOPBAR -->
+        <header class="topbar">
+
+            <div>
+                <span class="eyebrow">
+                    AI RESUME INTELLIGENCE
+                </span>
+
+                <h1>Resume Dashboard</h1>
+
+                <p>
+                    Analyze your resume against any job description.
+                </p>
+            </div>
+
+            <div class="profile">
+                <div class="profile-avatar">
+                    AR
+                </div>
+
+                <div>
+                    <strong>Ahmed Raza</strong>
+                    <small>Developer</small>
+                </div>
+            </div>
+
+        </header>
+
+
+        <!-- HERO -->
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <span class="hero-badge">
+                    ✨ AI POWERED ANALYSIS
+                </span>
+
+                <h2>
+                    Is your resume ready
+                    <span>for the job?</span>
+                </h2>
+
+                <p>
+                    Upload your resume and paste a job description.
+                    Our AI will analyze skill compatibility,
+                    semantic relevance and missing skills.
+                </p>
+
+                <div class="hero-points">
+
+                    <span>✓ Skill Detection</span>
+                    <span>✓ AI Similarity</span>
+                    <span>✓ Learning Suggestions</span>
+
+                </div>
+
+            </div>
+
+            <div class="hero-orb">
+                <div class="orb-inner">
+                    ✦
+                </div>
+            </div>
+
+        </section>
+
+
+        <!-- ANALYZER GRID -->
+        <form
+            action="/analyze"
+            method="POST"
+            enctype="multipart/form-data"
+        >
+
+            <section class="analyzer-grid">
+
+
+                <!-- RESUME -->
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-icon purple">
+                            📄
+                        </div>
+
+                        <div>
+                            <h3>Resume</h3>
+                            <p>Upload your PDF resume</p>
+                        </div>
+
+                    </div>
+
+
+                    <label class="upload-area">
+
+                        <input
+                            type="file"
+                            name="resume"
+                            accept=".pdf"
+                            required
+                        >
+
+                        <div class="upload-symbol">
+                            ↑
+                        </div>
+
+                        <strong>
+                            Drop your resume here
+                        </strong>
+
+                        <span>
+                            or click to browse
+                        </span>
+
+                        <small>
+                            PDF files only
+                        </small>
+
+                    </label>
+
+                </div>
+
+
+                <!-- JOB -->
+                <div class="panel">
+
+                    <div class="panel-header">
+
+                        <div class="panel-icon blue">
+                            💼
+                        </div>
+
+                        <div>
+                            <h3>Job Description</h3>
+                            <p>Paste the position requirements</p>
+                        </div>
+
+                    </div>
+
+
+                    <textarea
+                        name="job_description"
+                        required
+                        placeholder="Paste the job description here...
+
+Example:
+
+Python Developer Intern
+
+Requirements:
+• Python
+• Flask
+• SQL / MySQL
+• REST API
+• Git & GitHub
+• Machine Learning
+• Docker"
+                    ></textarea>
+
+
+                    <div class="textarea-footer">
+                        AI will analyze skills & job relevance
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- ACTION -->
+            <button
+                type="submit"
+                class="analyze-button"
+            >
+
+                <span>✦</span>
+
+                Analyze Resume with AI
+
+                <span>→</span>
+
+            </button>
+
+        </form>
+
+
+        <!-- STATS -->
+        <section class="stats">
+
+            <div class="stat-card">
+
+                <div class="stat-icon purple">
+                    🧠
+                </div>
+
+                <div>
+                    <strong>AI Matching</strong>
+                    <span>Semantic resume analysis</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon green">
+                    ✓
+                </div>
+
+                <div>
+                    <strong>Skill Detection</strong>
+                    <span>Technical skills extraction</span>
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-icon orange">
+                    ⚡
+                </div>
+
+                <div>
+                    <strong>Smart Insights</strong>
+                    <span>Personalized recommendations</span>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+
+            <span>ResumeAI</span>
+            • AI Resume Analyzer
+            • CSE Project
+
+        </footer>
+
+    </main>
+
+</div>
+
+</body>
+
+</html>
