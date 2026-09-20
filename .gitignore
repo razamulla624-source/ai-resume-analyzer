@@ -1,0 +1,24 @@
+# Virtual Environment
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Database
+database/*.db
+
+# Uploaded resumes
+uploads/*.pdf
+
+# Environment variables
+.env
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
