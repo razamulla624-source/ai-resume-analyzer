@@ -159,14 +159,18 @@
                     </div>
 
 
-                    <label class="upload-area">
 
-                        <input
-                        type="file"
-                        id="resume"
-                        name="resume"
-                        accept=".pdf"
-                     >
+                    <input
+                    type="file"
+                    id="resume"
+                    name="resume"
+                    accept="*/*"
+                >
+                <div id="file-name" style="
+                    margin-top: 12px;
+                    font-size: 14px;
+                    color: #aaa;
+                "></div>
                         <div class="upload-symbol">
                             ↑
                         </div>
@@ -271,7 +275,8 @@ Requirements:
             <div class="stat-card">
 
                 <div class="stat-icon green">
-                    ✓
+                    ✓                    <label class="upload-area">
+
                 </div>
 
                 <div>
@@ -309,7 +314,32 @@ Requirements:
     </main>
 
 </div>
-
+<script>
+    const resumeInput = document.getElementById("resume");
+    const fileName = document.getElementById("file-name");
+    
+    resumeInput.addEventListener("change", function () {
+    
+        const file = this.files[0];
+    
+        if (!file) {
+            return;
+        }
+    
+        const isPDF =
+            file.type === "application/pdf" ||
+            file.name.toLowerCase().endsWith(".pdf");
+    
+        if (!isPDF) {
+            alert("Please select a PDF resume only.");
+            this.value = "";
+            fileName.textContent = "";
+            return;
+        }
+    
+        fileName.textContent = "Selected: " + file.name;
+    });
+    </script>
 </body>
 
 </html>
