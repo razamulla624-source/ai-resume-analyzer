@@ -1,20 +1,43 @@
+import os
 import re
 
-from sentence_transformers import SentenceTransformer, util
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.metrics.pairwise import cosine_similarity
 
 
-# ==========================================
-# AI MODEL
-# ==========================================
+# =========================================================
+# OPTIONAL AI MODEL
+# =========================================================
+# Local PC:
+#   Uses Sentence Transformer exactly like before.
+#
+# Render Free:
+#   Heavy transformer model is NOT loaded.
+#   Lightweight TF-IDF similarity is used instead.
+# =========================================================
 
-model = SentenceTransformer(
-    "all-MiniLM-L6-v2"
-)
+IS_RENDER = os.getenv("RENDER", "").lower() == "true"
+
+model = None
+
+if not IS_RENDER:
+    try:
+        from sentence_transformers import SentenceTransformer, util
+
+        model = SentenceTransformer(
+            "all-MiniLM-L6-v2"
+        )
+
+        print("AI Model loaded: all-MiniLM-L6-v2")
+
+    except Exception as e:
+        print("Sentence Transformer unavailable:", e)
+        model = None
 
 
-# ==========================================
+# =========================================================
 # SKILLS DATABASE
-# ==========================================
+# =========================================================
 
 SKILLS = [
 
@@ -49,9 +72,9 @@ SKILLS = [
 ]
 
 
-# ==========================================
+# =========================================================
 # EXTRACT SKILLS
-# ==========================================
+# =========================================================
 
 def extract_skills(text):
 
@@ -72,9 +95,9 @@ def extract_skills(text):
     return found_skills
 
 
-# ==========================================
+# =========================================================
 # TECHNICAL SKILL MATCH
-# ==========================================
+# =========================================================
 
 def calculate_match(resume_skills, job_skills):
 
@@ -118,9 +141,9 @@ def calculate_match(resume_skills, job_skills):
     }
 
 
-# ==========================================
-# SEMANTIC AI SIMILARITY
-# ==========================================
+# =========================================================
+# SEMANTIC / TEXT SIMILARITY
+# =========================================================
 
 def calculate_text_similarity(
     resume_text,
@@ -129,27 +152,70 @@ def calculate_text_similarity(
 
     try:
 
-        resume_embedding = model.encode(
+        # -------------------------------------------------
+        # LOCAL COMPUTER
+        # -------------------------------------------------
+        # Keep the original Sentence Transformer AI.
+        # This is exactly the same model you were using.
+        # -------------------------------------------------
+
+        if model is not None:
+
+            resume_embedding = model.encode(
+                resume_text,
+                convert_to_tensor=True
+            )
+
+            job_embedding = model.encode(
+                job_description,
+                convert_to_tensor=True
+            )
+
+            similarity = util.cos_sim(
+                resume_embedding,
+                job_embedding
+            )
+
+            similarity_score = (
+                float(similarity[0][0])
+                * 100
+            )
+
+            similarity_score = max(
+                0,
+                min(
+                    100,
+                    similarity_score
+                )
+            )
+
+            return round(
+                similarity_score,
+                2
+            )
+
+        # -------------------------------------------------
+        # RENDER FREE
+        # -------------------------------------------------
+        # Lightweight text similarity.
+        # Does not load PyTorch / Sentence Transformer.
+        # -------------------------------------------------
+
+        vectorizer = TfidfVectorizer(
+            stop_words="english",
+            max_features=5000
+        )
+
+        vectors = vectorizer.fit_transform([
             resume_text,
-            convert_to_tensor=True
-        )
+            job_description
+        ])
 
-        job_embedding = model.encode(
-            job_description,
-            convert_to_tensor=True
-        )
+        similarity_score = cosine_similarity(
+            vectors[0:1],
+            vectors[1:2]
+        )[0][0] * 100
 
-        similarity = util.cos_sim(
-            resume_embedding,
-            job_embedding
-        )
-
-        similarity_score = (
-            float(similarity[0][0])
-            * 100
-        )
-
-        # Keep score between 0 and 100
         similarity_score = max(
             0,
             min(
@@ -166,16 +232,16 @@ def calculate_text_similarity(
     except Exception as e:
 
         print(
-            "Semantic similarity error:",
+            "Text similarity error:",
             e
         )
 
         return 0.0
 
 
-# ==========================================
+# =========================================================
 # OVERALL AI SCORE
-# ==========================================
+# =========================================================
 
 def calculate_overall_score(
     skill_score,
